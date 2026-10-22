@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkyLocker – Your school files, in one safe place</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f6fc;--card:#fff;--text:#0d1b2e;--muted:#5a6b82;--line:#dce6f2;--accent:#1d6fe0;--accent-h:#1559b8;--accent-soft:#e7f0fd;--danger:#c7372f;--danger-soft:#fdeceb;--ok:#14803c;--shadow:0 1px 2px rgba(13,27,46,.05),0 10px 30px rgba(29,111,224,.09)}
+:root[data-theme=dark]{--bg:#0a111d;--card:#121c2d;--text:#e9f0fa;--muted:#8d9fb8;--line:#22314a;--accent:#5aa8ff;--accent-h:#82bdff;--accent-soft:#14283f;--danger:#ff7a70;--danger-soft:#3a1d1d;--ok:#5ad087;--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;transition:background .2s,color .2s}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hidden{display:none!important}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--card);padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;transition:.15s}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme=dark] .btn.primary{color:#04162b}
+.btn.primary:hover{background:var(--accent-h)}
+.btn.primary:disabled{opacity:.6;cursor:wait}
+.btn.sm{padding:7px 12px;font-size:13px}
+.btn.danger:hover{border-color:var(--danger);color:var(--danger)}
+.icon-btn{width:40px;height:40px;padding:0}
+/* AUTH */
+#auth{min-height:100%;display:grid;grid-template-columns:1.05fr 1fr}
+.hero{position:relative;overflow:hidden;background:radial-gradient(80% 60% at 15% 8%,rgba(56,189,248,.38),transparent 62%),radial-gradient(70% 60% at 92% 92%,rgba(139,92,246,.42),transparent 62%),linear-gradient(160deg,#050f26,#0b2a6b 62%,#0a1a45);color:#fff;padding:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.hero::before,.hero::after{width:560px;height:560px;right:-180px;bottom:-160px;background:rgba(168,85,247,.28);animation:drift 18s ease-in-out infinite alternate}
+.hero::before{width:480px;height:480px;left:-160px;top:-120px;background:rgba(34,211,238,.22)}
+.hero::after{width:620px;height:210px;right:-140px;bottom:8%;animation:drift 18s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translateX(-60px)}}
+.hero h1{position:relative;z-index:1;font-size:clamp(46px,7vw,96px);line-height:1.05;font-weight:800;letter-spacing:-.035em;text-shadow:0 6px 30px rgba(4,22,60,.35)}
+.mark{position:relative;z-index:1;width:84px;height:84px;border-radius:26px;display:grid;place-items:center;margin-bottom:26px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px);box-shadow:0 12px 40px rgba(4,22,60,.3)}
+.hero p{margin-top:16px;max-width:30em;opacity:.88;font-size:17px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.01em}
+.logo i{width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,#2b86e8,#1559b8);display:grid;place-items:center;font-style:normal;color:#fff;box-shadow:0 4px 12px rgba(29,111,224,.35)}
+.perks{list-style:none;padding:0;display:grid;gap:10px;font-size:15px;position:relative;z-index:1}
+.perks li::before{content:"✓";margin-right:10px;font-weight:800}
+.panel{display:flex;align-items:center;justify-content:center;padding:32px 20px;position:relative}
+.panel .theme-fab{position:absolute;top:20px;right:20px}
+.form-box{width:100%;max-width:400px}
+.form-box h2{font-size:28px;font-weight:800;letter-spacing:-.02em}
+.form-box .sub{color:var(--muted);margin:6px 0 24px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--accent-soft);padding:4px;border-radius:12px;margin-bottom:22px}
+.tabs button{border:0;background:transparent;padding:9px;border-radius:9px;font-weight:600;color:var(--muted)}
+.tabs button.on{background:var(--card);color:var(--text);box-shadow:var(--shadow)}
+label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
+input[type=email],input[type=password],input[type=search],select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.form-box .btn.primary{width:100%;margin-top:22px;padding:13px}
+.msg{margin-top:14px;padding:10px 12px;border-radius:10px;font-size:14px}
+.msg.err{background:var(--danger-soft);color:var(--danger)}
+.msg.ok{background:var(--accent-soft);color:var(--ok)}
+.setup{background:var(--danger-soft);color:var(--danger);padding:12px 14px;border-radius:10px;margin-bottom:18px;font-size:14px}
+/* APP */
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .in{max-width:1000px;margin:auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.me{display:flex;align-items:center;gap:10px}
+.me span{font-size:14px;color:var(--muted);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+main{max-width:1000px;margin:auto;padding:28px 20px 60px}
+main h2{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.stat b{display:block;font-size:24px;font-weight:800}
+.stat small{color:var(--muted)}
+.bar{height:6px;background:var(--accent-soft);border-radius:9px;margin-top:8px;overflow:hidden}
+.bar div{height:100%;background:var(--accent);width:0;transition:width .4s}
+.drop{border:2px dashed var(--line);background:var(--card);border-radius:16px;padding:36px 20px;text-align:center;transition:.15s;cursor:pointer}
+.drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop strong{display:block;font-size:17px}
+.drop span{color:var(--muted);font-size:14px}
+.tools{display:flex;gap:10px;margin:26px 0 14px}
+.tools input{flex:1}
+.tools select{width:auto}
+.list{display:grid;gap:10px}
+.file{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.ext{flex:none;width:44px;height:44px;border-radius:11px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:11px;font-weight:800;text-transform:uppercase}
+.fi{flex:1;min-width:0}
+.fi b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fi small{color:var(--muted)}
+.acts{display:flex;gap:8px}
+.empty{text-align:center;color:var(--muted);padding:40px 10px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:11px 18px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:var(--shadow);z-index:20;max-width:90vw}
+.floaters{position:absolute;inset:0;z-index:0;pointer-events:none}
+.chip{position:absolute;left:var(--x);bottom:-60px;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid hsla(var(--h),90%,78%,.6);backdrop-filter:blur(6px);font-size:13px;font-weight:600;white-space:nowrap;color:#fff;opacity:0;box-shadow:0 0 24px hsla(var(--h),95%,65%,.4);animation:rise var(--dur) linear var(--delay) infinite}
+.chip i{width:9px;height:9px;border-radius:50%;background:hsl(var(--h),95%,70%);box-shadow:0 0 10px hsl(var(--h),95%,70%)}
+@keyframes rise{0%{transform:translate(0,0);opacity:0}10%,85%{opacity:.95}100%{transform:translate(var(--dx),-110vh);opacity:0}}
+@media(prefers-reduced-motion:reduce){.floaters{display:none}}
+.hero-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.2) 1px,transparent 1.2px);background-size:30px 30px;-webkit-mask-image:radial-gradient(70% 60% at 50% 50%,#000,transparent);mask-image:radial-gradient(70% 60% at 50% 50%,#000,transparent)}
+.lockup{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:30px}
+.emblem{position:relative;width:clamp(150px,18vw,210px);aspect-ratio:1;display:grid;place-items:center}
+.emblem::before{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(150deg,#15357c,#0a1d4d);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28),0 0 0 10px rgba(255,255,255,.07),0 0 70px rgba(90,168,255,.45),0 24px 60px rgba(2,10,40,.55)}
+.emblem .core{position:relative;width:62%;height:62%;filter:drop-shadow(0 8px 18px rgba(2,10,40,.5))}
+.word{font-size:clamp(34px,4.4vw,54px);font-weight:800;letter-spacing:-.03em;text-shadow:0 6px 30px rgba(2,10,40,.5)}
+.panel{background:radial-gradient(60% 50% at 80% 0%,var(--accent-soft),transparent 70%),var(--bg)}
+.form-box{background:var(--card);padding:36px 32px;border-radius:26px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.btn.primary{background:linear-gradient(135deg,#2b86e8,#1559b8);border-color:transparent;color:#fff}
+.btn.primary:hover{background:linear-gradient(135deg,#3b94f5,#1b66cc)}
+:root[data-theme=dark] .btn.primary{background:linear-gradient(135deg,#7ab8ff,#4a98f5);color:#04162b}
+.pw{position:relative}.pw input{padding-right:70px}
+.pw button{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--accent);font-weight:700;font-size:13px;padding:6px 8px;border-radius:8px}
+@media(max-width:480px){.form-box{padding:28px 20px}}
+.mob-logo{display:none;align-items:center;gap:10px;margin-bottom:26px}
+input[type=email],input[type=password],input[type=search],select{padding:13px 15px;border-radius:12px;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.btn{border-radius:12px}.btn.primary{box-shadow:0 6px 16px rgba(29,111,224,.28)}
+.form-box h2{font-size:30px}
+.tabs{border-radius:14px}.tabs button{transition:.15s}
+.stat{border-radius:16px;box-shadow:var(--shadow);border-color:transparent}
+.stat b{font-size:26px;color:var(--accent)}
+.drop{border-radius:20px;padding:40px 20px;box-shadow:var(--shadow);border-color:color-mix(in srgb,var(--accent) 35%,var(--line))}
+.drop .ico{width:56px;height:56px;border-radius:18px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin:0 auto 14px}
+.file{border-radius:16px;border-color:transparent;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s}
+.file:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(29,111,224,.16)}
+.ext{border-radius:12px}
+.ext.t-pdf{background:#fde8e6;color:#c7372f}.ext.t-doc{background:#e3eefc;color:#1d6fe0}.ext.t-xls{background:#e0f5e8;color:#14803c}.ext.t-ppt{background:#fff0dc;color:#c26a00}.ext.t-img{background:#f1e8fd;color:#7a3fd1}.ext.t-zip{background:#eceff3;color:#5a6b82}
+:root[data-theme=dark] .ext.t-pdf{background:#3a1d1d;color:#ff8a80}:root[data-theme=dark] .ext.t-doc{background:#14283f;color:#82bdff}:root[data-theme=dark] .ext.t-xls{background:#12301f;color:#6fe09a}:root[data-theme=dark] .ext.t-ppt{background:#3a2a12;color:#ffb74d}:root[data-theme=dark] .ext.t-img{background:#2a1d40;color:#c6a0ff}:root[data-theme=dark] .ext.t-zip{background:#1c2738;color:#8d9fb8}
+@media(prefers-reduced-motion:reduce){.hero::after{animation:none}}
+#auth{display:block;position:relative;min-height:100%;overflow:hidden}
+#auth .hero{position:absolute;inset:0;padding:0;display:block}
+:root:not([data-theme=dark]) #auth .hero{background:radial-gradient(80% 60% at 15% 8%,rgba(120,220,255,.5),transparent 62%),radial-gradient(70% 60% at 92% 92%,rgba(139,92,246,.4),transparent 62%),linear-gradient(160deg,#0d3f9c,#1f78e0 58%,#4aa8f5)}
+#auth .panel{position:relative;z-index:1;min-height:100vh;flex-direction:column;background:none;padding:32px 20px}
+#auth .lockup{gap:16px;margin-bottom:24px}
+#auth .emblem{width:clamp(96px,12vw,124px)}
+#auth .word{font-size:clamp(28px,3.4vw,38px)}
+#auth .theme-fab{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.32);color:#fff;backdrop-filter:blur(10px)}
+#auth .form-box{background:rgba(8,20,55,.38);-webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%);border:1px solid rgba(255,255,255,.28);box-shadow:0 30px 80px rgba(2,10,40,.45),inset 0 1px 0 rgba(255,255,255,.25);color:#fff}
+#auth .form-box h2{color:#fff}
+#auth .form-box .sub{color:rgba(255,255,255,.78)}
+#auth label{color:rgba(255,255,255,.92)}
+#auth .tabs{background:rgba(255,255,255,.12)}
+#auth .tabs button{color:rgba(255,255,255,.75)}
+#auth .tabs button.on{background:rgba(255,255,255,.24);color:#fff;box-shadow:none}
+#auth input[type=email],#auth input[type=password],#auth input[type=text]{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff}
+#auth input::placeholder{color:rgba(255,255,255,.55)}
+#auth input:focus{border-color:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.18)}
+#auth .pw button{color:#a9d6ff}
+#auth .btn.primary{background:#fff;color:#0b3a8a;border-color:transparent;box-shadow:0 10px 26px rgba(2,10,40,.35)}
+#auth .btn.primary:hover{background:#e6f2ff}
+#auth .msg.err,#auth .setup{background:rgba(255,90,80,.22);color:#ffd9d6}
+#auth .msg.ok{background:rgba(80,220,140,.22);color:#d4ffe3}
+
+@media(max-width:620px){.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:1/-1}.me span{display:none}.file{flex-wrap:wrap}.acts{width:100%}.acts .btn{flex:1}.tools{flex-direction:column}.tools select{width:100%}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN / SIGN UP -->
+<section id="auth" class="hidden">
+  <div class="hero">
+    <div class="floaters" id="floaters" aria-hidden="true"></div><div class="hero-grid"></div>
+  </div>
+  <div class="panel">
+    <button class="btn icon-btn theme-fab" data-theme-btn aria-label="Toggle dark mode">🌙</button>
+    <div class="lockup"><div class="emblem"><span class="core"><svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true"><defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#bfe3ff"/></linearGradient><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b86e8"/><stop offset="1" stop-color="#1346a8"/></linearGradient></defs><path d="M18 47a12 12 0 0 1-1.6-23.9A16 16 0 0 1 47.6 25 11 11 0 0 1 47 47H18z" fill="url(#cg)"/><path d="M29 33v-3.5a3 3 0 0 1 6 0V33" fill="none" stroke="url(#lg)" stroke-width="2.8" stroke-linecap="round"/><rect x="25.5" y="32.5" width="13" height="10.5" rx="3" fill="url(#lg)"/><circle cx="32" cy="37.4" r="1.6" fill="#fff"/></svg></span></div><div class="word">SkyLocker</div></div>
+      <div class="form-box">
+      <div id="setupWarn" class="setup hidden">Setup needed: add your Supabase URL and key in <b>index.html</b> (see the guide).</div>
+      <h2 id="authTitle">Welcome back</h2>
+      <p class="sub" id="authSub">Log in to see your files.</p>
+      <div class="tabs"><button id="tLogin" class="on" type="button">Log in</button><button id="tSign" type="button">Create account</button></div>
+      <div id="authForm">
+        <label for="email">School or personal email</label>
+        <input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+        <label for="pass">Password</label>
+        <div class="pw"><input id="pass" type="password" autocomplete="current-password" placeholder="At least 6 characters"><button type="button" id="showPw">Show</button></div>
+        <button class="btn primary" id="authBtn" type="button">Log in</button>
+        <div id="authMsg" class="msg hidden" role="alert"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="app" class="hidden">
+  <header class="top"><div class="in">
+    <div class="logo"><i><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg></i>SkyLocker</div>
+    <div class="me"><span id="who"></span>
+      <button class="btn icon-btn" data-theme-btn aria-label="Toggle dark mode">🌙</button>
+      <button class="btn sm" id="logout">Log out</button></div>
+  </div></header>
+  <main>
+    <h2>My files</h2>
+    <div class="stats">
+      <div class="stat"><b id="sCount">0</b><small>Files</small></div>
+      <div class="stat"><b id="sSize">0 B</b><small>Space used</small></div>
+      <div class="stat"><b id="sPct">0%</b><small>Of 1 GB free space</small><div class="bar"><div id="sBar"></div></div></div>
+    </div>
+    <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose files to upload">
+      <div class="ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg></div><strong id="dropTitle">Drop files here or click to browse</strong>
+      <span>Any file type · up to 50 MB each</span>
+      <input type="file" id="picker" multiple class="hidden">
+    </div>
+    <div class="tools">
+      <input type="search" id="q" placeholder="Search your files" aria-label="Search files">
+      <select id="sort" aria-label="Sort files"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="name">Name A–Z</option><option value="big">Largest first</option></select>
+    </div>
+    <div class="list" id="list"></div>
+  </main>
+</section>
+<div id="toast" class="toast hidden" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* ====== 1. PASTE YOUR SUPABASE DETAILS HERE ====== */
+const SUPABASE_URL = "https://srxgvzyragistpiwiuto.supabase.co";
+const SUPABASE_KEY = "sb_publishable_cBTfzi3o0PymXOBL68NtVA_bTF-Tk94";
+/* ================================================= */
+
+const $ = id => document.getElementById(id);
+const BUCKET = "files", MAX = 50 * 1024 * 1024, QUOTA = 1024 ** 3;
+const configured = !SUPABASE_URL.startsWith("npm install @supabase/supabase-js @supabase/ssr");
+const sb = configured ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+let user = null, files = [], mode = "login";
+
+/* ---- theme ---- */
+function setTheme(t){
+  document.documentElement.dataset.theme = t;
+  document.querySelectorAll("[data-theme-btn]").forEach(b => b.textContent = t === "dark" ? "☀️" : "🌙");
+  try { localStorage.setItem("theme", t); } catch(e){}
+}
+let saved = null; try { saved = localStorage.getItem("theme"); } catch(e){}
+setTheme(saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+document.querySelectorAll("[data-theme-btn]").forEach(b => b.onclick = () =>
+  setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));
+
+/* ---- helpers ---- */
+function toast(t){ const e = $("toast"); e.textContent = t; e.classList.remove("hidden"); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.add("hidden"), 3000); }
+function fmt(b){ if (b < 1024) return b + " B"; const u = ["KB","MB","GB"]; let i = -1; do { b /= 1024; i++; } while (b >= 1024 && i < 2); return b.toFixed(b < 10 ? 1 : 0) + " " + u[i]; }
+function msg(t, ok){ const m = $("authMsg"); m.textContent = t; m.className = "msg " + (ok ? "ok" : "err"); }
+const disp = n => n.replace(/^\d+_/, "");
+
+/* ---- auth ---- */
+function setMode(m){
+  mode = m;
+  $("tLogin").classList.toggle("on", m === "login"); $("tSign").classList.toggle("on", m === "signup");
+  $("authTitle").textContent = m === "login" ? "Welcome back" : "Create your account";
+  $("authSub").textContent = m === "login" ? "Log in to see your files." : "It takes less than a minute.";
+  $("authBtn").textContent = m === "login" ? "Log in" : "Create account";
+  $("pass").autocomplete = m === "login" ? "current-password" : "new-password";
+  $("authMsg").className = "msg hidden";
+}
+$("tLogin").onclick = () => setMode("login"); $("tSign").onclick = () => setMode("signup");
+
+async function submitAuth(){
+  if (!configured) return msg("Add your Supabase details first (see the guide).");
+  const email = $("email").value.trim(), password = $("pass").value;
+  if (!email || password.length < 6) return msg("Enter your email and a password of at least 6 characters.");
+  const btn = $("authBtn"); btn.disabled = true;
+  const { data, error } = mode === "login"
+    ? await sb.auth.signInWithPassword({ email, password })
+    : await sb.auth.signUp({ email, password });
+  btn.disabled = false;
+  if (error) return msg(error.message);
+  if (mode === "signup" && !data.session) { setMode("login"); msg("Account created. Check your email to confirm it, then log in.", true); }
+}
+$("authBtn").onclick = submitAuth;
+["email","pass"].forEach(i => $(i).addEventListener("keydown", e => { if (e.key === "Enter") submitAuth(); }));
+$("showPw").onclick = () => { const p = $("pass"), h = p.type === "password"; p.type = h ? "text" : "password"; $("showPw").textContent = h ? "Hide" : "Show"; };
+$("logout").onclick = () => sb.auth.signOut();
+
+function show(u){
+  user = u;
+  $("auth").classList.toggle("hidden", !!u); $("app").classList.toggle("hidden", !u);
+  if (u) { $("who").textContent = u.email; loadFiles(); } else files = [];
+}
+
+/* ---- files ---- */
+async function loadFiles(){
+  const { data, error } = await sb.storage.from(BUCKET).list(user.id, { limit: 1000, sortBy: { column: "created_at", order: "desc" } });
+  if (error) return toast("Could not load files: " + error.message);
+  files = (data || []).filter(f => f.name !== ".emptyFolderPlaceholder");
+  render();
+}
+function render(){
+  const q = $("q").value.toLowerCase(), s = $("sort").value;
+  const size = f => f.metadata?.size || 0, time = f => new Date(f.created_at || 0);
+  let v = files.filter(f => disp(f.name).toLowerCase().includes(q));
+  v.sort((a, b) => s === "name" ? disp(a.name).localeCompare(disp(b.name)) : s === "big" ? size(b) - size(a) : s === "old" ? time(a) - time(b) : time(b) - time(a));
+  const total = files.reduce((n, f) => n + size(f), 0), pct = Math.min(100, total / QUOTA * 100);
+  $("sCount").textContent = files.length; $("sSize").textContent = fmt(total);
+  $("sPct").textContent = pct.toFixed(1) + "%"; $("sBar").style.width = pct + "%";
+  const L = $("list"); L.innerHTML = "";
+  if (!v.length) { L.innerHTML = `<div class="empty">${files.length ? "No files match your search." : "No files yet. Drop your first file above."}</div>`; return; }
+  v.forEach(f => {
+    const name = disp(f.name), ext = (name.split(".").pop() || "file").slice(0, 4);
+    const row = document.createElement("div"); row.className = "file";
+    row.innerHTML = `<div class="ext"></div><div class="fi"><b></b><small></small></div><div class="acts"><button class="btn sm dl">Download</button><button class="btn sm danger rm">Delete</button></div>`;
+    const ex = row.querySelector(".ext"); ex.textContent = ext;
+    const lo = ext.toLowerCase(), T = {pdf:"pdf",doc:"doc",docx:"doc",txt:"doc",xls:"xls",xlsx:"xls",csv:"xls",ppt:"ppt",pptx:"ppt",png:"img",jpg:"img",jpeg:"img",gif:"img",webp:"img",zip:"zip",rar:"zip","7z":"zip"};
+    if (T[lo]) ex.classList.add("t-" + T[lo]);
+    row.querySelector("b").textContent = name; row.querySelector("b").title = name;
+    row.querySelector("small").textContent = fmt(size(f)) + " · " + time(f).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+    row.querySelector(".dl").onclick = () => download(f);
+    row.querySelector(".rm").onclick = () => remove(f);
+    L.appendChild(row);
+  });
+}
+async function upload(list){
+  const arr = [...list]; if (!arr.length) return;
+  let done = 0;
+  for (const f of arr) {
+    if (f.size > MAX) { toast(`${f.name} is over 50 MB.`); continue; }
+    $("dropTitle").textContent = `Uploading ${f.name}…`;
+    const safe = f.name.replace(/[^\w.\- ]+/g, "_");
+    const { error } = await sb.storage.from(BUCKET).upload(`${user.id}/${Date.now()}_${safe}`, f, { contentType: f.type || "application/octet-stream" });
+    if (error) toast(`Could not upload ${f.name}: ${error.message}`); else done++;
+  }
+  $("dropTitle").textContent = "Drop files here or click to browse";
+  $("picker").value = "";
+  if (done) toast(done === 1 ? "File uploaded" : done + " files uploaded");
+  loadFiles();
+}
+async function download(f){
+  const { data, error } = await sb.storage.from(BUCKET).createSignedUrl(`${user.id}/${f.name}`, 60, { download: disp(f.name) });
+  if (error) return toast("Download failed: " + error.message);
+  const a = document.createElement("a"); a.href = data.signedUrl; a.click();
+}
+async function remove(f){
+  if (!confirm(`Delete "${disp(f.name)}"? This cannot be undone.`)) return;
+  const { error } = await sb.storage.from(BUCKET).remove([`${user.id}/${f.name}`]);
+  if (error) return toast("Delete failed: " + error.message);
+  toast("File deleted"); loadFiles();
+}
+const drop = $("drop");
+drop.onclick = () => $("picker").click();
+drop.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("picker").click(); } };
+$("picker").onchange = e => upload(e.target.files);
+["dragenter","dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => upload(e.dataTransfer.files));
+$("q").oninput = render; $("sort").onchange = render;
+
+/* ---- floating file names on the login panel ---- */
+(function(){
+  const box = $("floaters"); if (!box) return;
+  const names = ["Science_Project.docx","Math_Quiz.pdf","History_Essay.docx","Lab_Report.pdf","ACT_Draft_v2.docx","Group_Slides.pptx","Budget.xlsx","Poster_Final.png","English_Notes.txt","Code_Activity.zip","Research_Paper.pdf","Thesis_Outline.docx","Photo_Journal.jpg","Chem_Worksheet.pdf"];
+  const N = names.length;
+  names.sort(() => Math.random() - .5).forEach((n, i) => {
+    const c = document.createElement("div"); c.className = "chip";
+    c.style.setProperty("--h", Math.round(i * 360 / N));
+    c.style.setProperty("--x", (Math.random() * 70 + 2) + "%");
+    c.style.setProperty("--dx", (Math.random() * 120 - 60) + "px");
+    c.style.setProperty("--dur", (14 + Math.random() * 10) + "s");
+    c.style.setProperty("--delay", (-Math.random() * 20) + "s");
+    c.innerHTML = "<i></i>"; c.append(n);
+    box.appendChild(c);
+  });
+})();
+
+/* ---- start ---- */
+if (configured) {
+  sb.auth.onAuthStateChange((_e, session) => show(session ? session.user : null));
+  sb.auth.getSession().then(({ data }) => show(data.session ? data.session.user : null));
+} else { $("setupWarn").classList.remove("hidden"); show(null); }
+</script>
+</body>
+</html>
