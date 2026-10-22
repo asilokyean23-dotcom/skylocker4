@@ -48,7 +48,7 @@ button{cursor:pointer}
 .tabs button{border:0;background:transparent;padding:9px;border-radius:9px;font-weight:600;color:var(--muted)}
 .tabs button.on{background:var(--card);color:var(--text);box-shadow:var(--shadow)}
 label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
-input[type=email],input[type=password],input[type=search],select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+input[type=email],input[type=password],input[type=text],input[type=search],select{box-sizing:border-box;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
 input:focus,select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
 .form-box .btn.primary{width:100%;margin-top:22px;padding:13px}
 .msg{margin-top:14px;padding:10px 12px;border-radius:10px;font-size:14px}
@@ -100,11 +100,11 @@ main h2{font-size:26px;font-weight:800;letter-spacing:-.02em}
 .btn.primary{background:linear-gradient(135deg,#2b86e8,#1559b8);border-color:transparent;color:#fff}
 .btn.primary:hover{background:linear-gradient(135deg,#3b94f5,#1b66cc)}
 :root[data-theme=dark] .btn.primary{background:linear-gradient(135deg,#7ab8ff,#4a98f5);color:#04162b}
-.pw{position:relative}.pw input{padding-right:70px}
-.pw button{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--accent);font-weight:700;font-size:13px;padding:6px 8px;border-radius:8px}
+.pw{position:relative;width:100%}.pw input{display:block;width:100%;box-sizing:border-box;padding-right:76px!important;min-height:46px}
+.pw button{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:48px;height:30px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;border:0;background:transparent;color:var(--accent);font-weight:700;font-size:13px;padding:0;border-radius:8px;line-height:1;white-space:nowrap}
 @media(max-width:480px){.form-box{padding:28px 20px}}
 .mob-logo{display:none;align-items:center;gap:10px;margin-bottom:26px}
-input[type=email],input[type=password],input[type=search],select{padding:13px 15px;border-radius:12px;transition:border-color .15s,box-shadow .15s}
+input[type=email],input[type=password],input[type=text],input[type=search],select{box-sizing:border-box;padding:13px 15px;border-radius:12px;transition:border-color .15s,box-shadow .15s}
 input:focus,select:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
 .btn{border-radius:12px}.btn.primary{box-shadow:0 6px 16px rgba(29,111,224,.28)}
 .form-box h2{font-size:30px}
@@ -158,7 +158,7 @@ input:focus,select:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 4
     <button class="btn icon-btn theme-fab" data-theme-btn aria-label="Toggle dark mode">🌙</button>
     <div class="lockup"><div class="emblem"><span class="core"><svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true"><defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#bfe3ff"/></linearGradient><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b86e8"/><stop offset="1" stop-color="#1346a8"/></linearGradient></defs><path d="M18 47a12 12 0 0 1-1.6-23.9A16 16 0 0 1 47.6 25 11 11 0 0 1 47 47H18z" fill="url(#cg)"/><path d="M29 33v-3.5a3 3 0 0 1 6 0V33" fill="none" stroke="url(#lg)" stroke-width="2.8" stroke-linecap="round"/><rect x="25.5" y="32.5" width="13" height="10.5" rx="3" fill="url(#lg)"/><circle cx="32" cy="37.4" r="1.6" fill="#fff"/></svg></span></div><div class="word">SkyLocker</div></div>
       <div class="form-box">
-      <div id="setupWarn" class="setup hidden">Setup needed: add your Supabase URL and key in <b>index.html</b> (see the guide).</div>
+      <div id="setupWarn" class="setup hidden">Setup needed: add your Supabase Project URL and publishable/anon key in <b>index.html</b>. The command <code>npm install @supabase/supabase-js @supabase/ssr</code> is run in your project terminal, not used as a URL.</div>
       <h2 id="authTitle">Welcome back</h2>
       <p class="sub" id="authSub">Log in to see your files.</p>
       <div class="tabs"><button id="tLogin" class="on" type="button">Log in</button><button id="tSign" type="button">Create account</button></div>
@@ -212,7 +212,7 @@ const SUPABASE_KEY = "sb_publishable_cBTfzi3o0PymXOBL68NtVA_bTF-Tk94";
 
 const $ = id => document.getElementById(id);
 const BUCKET = "files", MAX = 50 * 1024 * 1024, QUOTA = 1024 ** 3;
-const configured = !SUPABASE_URL.startsWith("npm install @supabase/supabase-js @supabase/ssr");
+const configured = SUPABASE_URL !== "YOUR_SUPABASE_URL" && SUPABASE_KEY !== "YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY";
 const sb = configured ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 let user = null, files = [], mode = "login";
 
